@@ -20,5 +20,11 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Navgraph Helper"
-include(":AutoargsDemo")
+include(":app")
 include(":Autoargsdestination")
+include(":features")
+include(":features:treatment_manager")
+include(":features:treatment_manager:ui")
+include(":features:treatment_manager:domain")
+include(":features:treatment_manager:data")
+include(":UiCore")
