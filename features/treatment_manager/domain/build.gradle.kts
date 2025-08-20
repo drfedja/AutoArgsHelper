@@ -1,16 +1,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.axesoft.autoargsdestination"
+    namespace = "com.axesoft.treatment_manager.domain"
     compileSdk = 36
 
-    buildFeatures {
-        buildConfig = true
-    }
     defaultConfig {
         minSdk = 24
 
@@ -19,10 +15,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            isMinifyEnabled = false
-            buildConfigField("boolean", "DEBUG", "true")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -41,14 +33,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.navigation.common.android)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.transport.runtime)
 }

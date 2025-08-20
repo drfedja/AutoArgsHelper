@@ -1,16 +1,14 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt.android)
+    kotlin("kapt")
 }
 
 android {
-    namespace = "com.axesoft.autoargsdestination"
+    namespace = "com.axesoft.treatment_manager.data"
     compileSdk = 36
 
-    buildFeatures {
-        buildConfig = true
-    }
     defaultConfig {
         minSdk = 24
 
@@ -19,10 +17,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            isMinifyEnabled = false
-            buildConfigField("boolean", "DEBUG", "true")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -37,6 +31,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+    }
+    packagingOptions {
+        resources {
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+        }
     }
 }
 
@@ -44,11 +44,13 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.navigation.common.android)
+    implementation(libs.okhttp)
+    implementation(project(":features:treatment_manager:domain"))
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
