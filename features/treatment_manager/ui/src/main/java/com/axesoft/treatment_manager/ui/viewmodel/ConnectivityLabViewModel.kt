@@ -30,7 +30,8 @@ class ConnectivityLabViewModel @Inject constructor(
         ConnectivityLabViewModel.Event,
         ConnectivityLabViewModel.ViewState,
         ConnectivityLabViewModel.Action
-        >() {
+        >()
+{
 
     private var retryDelayMs = 1000L
 

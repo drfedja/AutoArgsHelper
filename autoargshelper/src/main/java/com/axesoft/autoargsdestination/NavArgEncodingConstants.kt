@@ -1,0 +1,26 @@
+package com.axesoft.autoargsdestination
+
+internal object NavArgEncodingConstants {
+    const val PERCENTAGE = "%"
+    const val PERCENTAGE_UNI = "PS_U_0025"
+    const val AMPERSAND = "&"
+    const val AMPERSAND_UNI = "PS_U_0026"
+    const val EQUALS_SIGN = "="
+    const val EQUALS_SIGN_UNI = "PS_U_003D"
+    const val QUESTION_MARK = "?"
+    const val QUESTION_MARK_UNI = "PS_U_003F"
+    const val FORWARD_SLASH = "/"
+    const val FORWARD_SLASH_UNI = "PS_U_002F"
+    const val DOLLAR_SIGN = "$"
+    const val DOLLAR_SIGN_UNI = "PS_U_0024"
+    const val LEFT_CURLY_BRACKET = "{"
+    const val LEFT_CURLY_BRACKET_UNI = "PS_U_007B"
+    const val RIGHT_CURLY_BRACKET = "}"
+    const val RIGHT_CURLY_BRACKET_UNI = "PS_U_007D"
+    const val PLUS_SIGN = "+"
+    const val PLUS_SIGN_UNI = "PS_U_002B"
+    const val NEW_LINE = "\n"
+    const val NEW_LINE_UNI = "PS_U_000A"
+    const val CARRIAGE_RETURN = "\r"
+    const val CARRIAGE_RETURN_UNI = "PS_U_0013"
+}

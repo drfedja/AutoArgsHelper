@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material.xml)
-    implementation(project(":Autoargsdestination"))
+    implementation(project(":autoargshelper"))
     implementation(project(":features:treatment_manager:ui"))
     implementation(project(":features:treatment_manager:data"))
     implementation(project(":UiCore"))
