@@ -65,8 +65,8 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
+    implementation(project(":autoargshelper"))
 
-    implementation(project(":Autoargsdestination"))
     implementation(project(":UiCore"))
     implementation(project(":features:treatment_manager:domain"))
 

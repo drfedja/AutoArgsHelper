@@ -12,12 +12,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
+import kotlin.collections.associate
 
-internal class ArgsSerializer <T : Any>(
+internal open class ArgsSerializer<T : Any>(
     private val serializer: KSerializer<T>
 ) {
     fun getArguments(savedStateHandle: SavedStateHandle, arguments: List<NamedNavArgument>): T {
@@ -32,13 +29,19 @@ internal class ArgsSerializer <T : Any>(
             }
             arg.name to value
         }
-        return Json.decodeFromJsonElement(serializer, JsonObject(rawMap))
+        return Json.decodeFromJsonElement(
+            deserializer = serializer,
+            element = JsonObject(rawMap)
+        )
     }
 
     fun getArguments(bundle: Bundle?, arguments: List<NamedNavArgument>): T {
         val rawMap = arguments.associate { arg ->
             val value: JsonPrimitive = when (arg.argument.type) {
-                NavType.BoolType -> JsonPrimitive(bundle?.getBoolean(arg.name) ?: false)
+                NavType.BoolType -> JsonPrimitive(
+                    bundle?.getBoolean(arg.name) ?: false
+                )
+
                 NavType.IntType -> JsonPrimitive(bundle?.getInt(arg.name) ?: 0)
                 NavType.FloatType -> JsonPrimitive(bundle?.getFloat(arg.name) ?: 0f)
                 NavType.LongType -> JsonPrimitive(bundle?.getLong(arg.name) ?: 0L)
@@ -47,13 +50,20 @@ internal class ArgsSerializer <T : Any>(
             }
             arg.name to value
         }
-        return Json.decodeFromJsonElement(serializer, JsonObject(rawMap))
+        return Json.decodeFromJsonElement(
+            deserializer = serializer,
+            element = JsonObject(rawMap)
+        )
     }
 
-    fun buildRoute(args: T, baseRoute: String, arguments: List<NamedNavArgument>): String {
+    fun buildRoute(args: T, baseRoute: String): String {
         val map = Json.encodeToJsonElement(serializer, args).jsonObject
-        val query = map.entries.joinToString("&") {
-            "${it.key}=${encodeStringToArg(it.value.jsonPrimitive.content)}"
+        val query = map.entries.joinToString("&")
+        { (key, value) ->
+            when (value) {
+                is JsonPrimitive -> "$key=${encodeStringToArg(value.content)}"
+                else -> "$key=${value.objectToNavArg()}"
+            }
         }
         return "$baseRoute?$query"
     }
@@ -78,35 +88,4 @@ internal class ArgsSerializer <T : Any>(
             }
         }
     }
-
-    /**
-     * Converts object (including list of objects) to String for passing data between destinations.
-     * Custom Object should be Serializable.
-     * Uses together with [toOriginalObject].
-     */
-    fun <T> objectToNavArg(value: T, serializer: KSerializer<T>): String {
-        return try {
-            URLEncoder.encode(Json.encodeToString(serializer, value), StandardCharsets.UTF_8.toString())
-        } catch (e: Exception) {
-            if (BuildConfig.DEBUG) throw e else ""
-        }
-    }
-
-    /**
-     * Converts String back to original Object.
-     * Uses together with [objectToNavArg].
-     */
-    fun <R> toOriginalObject(value: String, serializer: KSerializer<R>): R? {
-        return try {
-            Json.decodeFromString(serializer, decodeStringFromArg(value))
-        } catch (e: Exception) {
-            if (BuildConfig.DEBUG) throw e else null
-        }
-    }
-
-    private fun encodeStringToArg(value: String): String =
-        URLEncoder.encode(value, StandardCharsets.UTF_8.toString())
-
-    private fun decodeStringFromArg(value: String): String =
-        URLDecoder.decode(value, StandardCharsets.UTF_8.toString())
 }

@@ -10,9 +10,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/Autoargsdestination" />
             <option value="$PROJECT_DIR$/UiCore" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/autoargshelper" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/treatment_manager" />
             <option value="$PROJECT_DIR$/features/treatment_manager/data" />

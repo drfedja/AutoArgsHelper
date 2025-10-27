@@ -27,18 +27,12 @@ class AutoArgsDestinationTest {
     object TestDestination : AutoArgsDestination<TestArgs>(TestArgs.serializer()) {
         override val baseRoute: String = "test"
         override val navGraphRoute: String = "test_graph"
+        override val argumentSerializers: Map<String, KSerializer<out Any>>
+            get() = TODO("Not yet implemented")
     }
 
     @Serializable
     data class TestArgsFallback(val id: Int, val custom: String)
-
-    @Serializable
-    data class TestArgsCustom(val intValue: Int, val stringValue: String)
-
-    object TestDestinationCustom : AutoArgsDestination<TestArgsCustom>(TestArgsCustom.serializer()) {
-        override val baseRoute: String = "custom"
-        override val navGraphRoute: String = "custom_graph"
-    }
 
     @Test
     fun `route should include argument placeholders`() {
@@ -88,22 +82,6 @@ class AutoArgsDestinationTest {
 
         val result = TestDestination.getArguments(bundle)
         Assert.assertEquals(args, result)
-    }
-
-    @Test
-    fun `objectToNavArg and toOriginalObject roundtrip works`() {
-        val original = TestArgsCustom(42, "Fedja")
-        val encoded = TestDestinationCustom.toNavArg(original, TestArgsCustom.serializer())
-        val decoded = TestDestinationCustom.fromNavArg(encoded, TestArgsCustom.serializer())
-        Assert.assertEquals(original, decoded)
-    }
-
-    @Test
-    fun `objectToNavArg handles special characters`() {
-        val original = TestArgsCustom(1, "String with spaces & symbols %?")
-        val encoded = TestDestinationCustom.toNavArg(original, TestArgsCustom.serializer())
-        val decoded = TestDestinationCustom.fromNavArg(encoded, TestArgsCustom.serializer())
-        Assert.assertEquals(original, decoded)
     }
 
     @Test
@@ -174,6 +152,8 @@ class AutoArgsDestinationTest {
     object DummyDestination : AutoArgsDestination<Unit>(DummySerializer()) {
         override val baseRoute: String = "dummy"
         override val navGraphRoute: String = "dummy_graph"
+        override val argumentSerializers: Map<String, KSerializer<out Any>>
+            get() = TODO("Not yet implemented")
     }
 
     @Test
