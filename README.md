@@ -1,6 +1,6 @@
-# NavGraphHelper
+# AutoArgsHelper
 
-**NavGraphHelper** is a lightweight Android library and demo app that simplifies working with **Jetpack Navigation**, **Kotlin Serialization**, and **SavedStateHandle**. 
+**AutoArgsHelper** is a lightweight Android library and demo app that simplifies working with **Jetpack Navigation**, **Kotlin Serialization**, and **SavedStateHandle**. 
 It allows you to easily define navigation destinations using `@Serializable` data classes, automatically passing and retrieving typed arguments between screens.
 
 ---
