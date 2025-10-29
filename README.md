@@ -78,8 +78,9 @@ fun DemoNavHost() {
 }
 ```
 
-## Workflow 
+## Flow chart
 
+```
 SavedStateHandle
       │
       │  (contains raw arguments: Strings, serialized JSON, primitives)
@@ -121,6 +122,7 @@ ViewModel / Hilt injection
       │    args.primitiveArg
       ▼
 Usage in UI / Business Logic
+```
 
 ## Demo App
 
