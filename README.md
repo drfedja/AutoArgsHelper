@@ -1,6 +1,6 @@
-# NavGraphHelper
+# AutoArgsHelper
 
-**NavGraphHelper** is a lightweight Android library and demo app that simplifies working with **Jetpack Navigation**, **Kotlin Serialization**, and **SavedStateHandle**. 
+**AutoArgsHelper** is a lightweight Android library and demo app that simplifies working with **Jetpack Navigation**, **Kotlin Serialization**, and **SavedStateHandle**. 
 It allows you to easily define navigation destinations using `@Serializable` data classes, automatically passing and retrieving typed arguments between screens.
 
 ---
@@ -77,6 +77,53 @@ fun DemoNavHost() {
     }
 }
 ```
+
+## Flow chart
+
+```
+SavedStateHandle
+      │
+      │  (contains raw arguments: Strings, serialized JSON, primitives)
+      ▼
+───────────────────────────────
+| map argumentSerializers     |   ← argumentSerializers: Map<String, KSerializer<out Any>>
+|  (KSerializer for complex    |
+|   and primitive types)      |
+───────────────────────────────
+      │
+      │  getComplexArgs<T>() reads each argument:
+      │    - if primitive: use directly
+      │    - if complex: decode JSON using serializer
+      ▼
+───────────────────────────────
+| argsMap: Map<String, Any?>  |   ← deserialized values
+|  key1 -> ComplexObject(...) |
+|  key2 -> "string value"     |
+───────────────────────────────
+      │
+      │  mapToArgs<T>(argsMap)
+      │    - converts primitives to JsonPrimitive
+      │    - converts complex objects to JsonElements
+      │    - builds JsonObject
+      │    - decodes to target data class T
+      ▼
+───────────────────────────────
+| T Data Class Object         |   ← fully typed object
+|  complexArg: ComplexType?   |
+|  primitiveArg: String       |
+───────────────────────────────
+      │
+      │  Returned to ViewModel / Hilt
+      ▼
+ViewModel / Hilt injection
+      │
+      │  type-safe usage:
+      │    args.complexArg?.field
+      │    args.primitiveArg
+      ▼
+Usage in UI / Business Logic
+```
+
 ## Demo App
 
 The included demo app shows:
