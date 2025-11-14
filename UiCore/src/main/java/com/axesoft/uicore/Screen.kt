@@ -18,7 +18,6 @@ import com.axesoft.uicore.base.BaseViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 
-
 val LocalNavController = staticCompositionLocalOf<NavController> { error("No AppState provided") }
 
 @SuppressLint("RestrictedApi")

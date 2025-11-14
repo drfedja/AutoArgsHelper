@@ -27,8 +27,7 @@ class AutoArgsDestinationTest {
     object TestDestination : AutoArgsDestination<TestArgs>(TestArgs.serializer()) {
         override val baseRoute: String = "test"
         override val navGraphRoute: String = "test_graph"
-        override val argumentSerializers: Map<String, KSerializer<out Any>>
-            get() = TODO("Not yet implemented")
+        override var complexArgumentsSerializers: Map<String, KSerializer<out Any>> = mapOf()
     }
 
     @Serializable
@@ -152,8 +151,7 @@ class AutoArgsDestinationTest {
     object DummyDestination : AutoArgsDestination<Unit>(DummySerializer()) {
         override val baseRoute: String = "dummy"
         override val navGraphRoute: String = "dummy_graph"
-        override val argumentSerializers: Map<String, KSerializer<out Any>>
-            get() = TODO("Not yet implemented")
+        override var complexArgumentsSerializers: Map<String, KSerializer<out Any>> = mapOf()
     }
 
     @Test

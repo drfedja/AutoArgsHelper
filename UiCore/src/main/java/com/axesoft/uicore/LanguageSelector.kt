@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,14 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.util.Locale
-import kotlin.apply
-import kotlin.collections.forEach
 
 @Composable
 fun LanguageSelector(
+    modifier: Modifier = Modifier,
     availableLocales: List<Locale>,
     currentLocale: Locale,
     onLocaleChange: (Locale) -> Unit,
@@ -37,18 +38,20 @@ fun LanguageSelector(
     },
     textColor: @Composable (isSelected: Boolean) -> Color = { isSelected ->
         if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
-    }
+    },
+    style: TextStyle = LocalTextStyle.current,
+    outlineColor: Color = MaterialTheme.colorScheme.outline,
+    roundedCorner: RoundedCornerShape = RoundedCornerShape(0.dp)
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(roundedCorner)
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .border(
                 1.dp,
-                MaterialTheme.colorScheme.outline,
-                RoundedCornerShape(8.dp)
+                outlineColor,
+                roundedCorner
             )
     ) {
         availableLocales.forEach { locale ->
@@ -63,7 +66,8 @@ fun LanguageSelector(
             ) {
                 Text(
                     text = locale.displayLanguage,
-                    color = textColor(isSelected)
+                    color = textColor(isSelected),
+                    style = style
                 )
             }
         }
