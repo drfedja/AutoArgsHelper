@@ -6,6 +6,8 @@ import androidx.navigation.NamedNavArgument
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialKind
+import kotlinx.serialization.descriptors.StructureKind
 import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
@@ -58,7 +60,6 @@ abstract class AutoArgsDestination<T : Any>(
      *
      * Unlike the other two variants, this function can reconstruct full data classes
      * containing nested @Serializable objects (e.g. DTOs, UI models).
-     * It works for both complex and primitive types.
      * It uses [complexArgumentsSerializers] to resolve each argument’s serializer,
      * deserializes them from their encoded string form,
      * and rebuilds the full argument data class via [mapToArgs].
@@ -66,12 +67,18 @@ abstract class AutoArgsDestination<T : Any>(
     inline fun <reified T : Any> SavedStateHandle.getComplexArgs(): T {
         val argsMap: Map<String, Any?> =
             complexArgumentsSerializers.mapValues { (name, serializer) ->
-                when (serializer) {
-                    String.serializer() -> this[name] as? String
-                    else -> {
-                        val str = this[name] as? String ?: return@mapValues null
-                        if (str.isBlank()) null else str.toOriginalObject(serializer)
+                val valueStr = this[name] as? String ?: return@mapValues null
+                if (valueStr.isBlank()) return@mapValues null
+                try {
+                    when (serializer.descriptor.kind) {
+                        SerialKind.ENUM, StructureKind.CLASS, StructureKind.OBJECT -> {
+                            valueStr.toOriginalObject(serializer)
+                        }
+                        else -> valueStr
                     }
+                } catch (e: Exception) {
+                    println("Exception e: ${e.message}")
+                    valueStr
                 }
             }
         return mapToArgs(argsMap)
@@ -109,6 +116,7 @@ abstract class AutoArgsDestination<T : Any>(
                         propClass == Long::class -> Long.serializer()
                         propClass == Float::class -> Float.serializer()
                         propClass == Double::class -> Double.serializer()
+                        propClass.java.isEnum -> propClass.serializer() as KSerializer<Any>
                         else -> null
                     }
                     if (serializer != null) {

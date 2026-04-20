@@ -50,9 +50,9 @@ abstract class BaseNestedViewModel<Event : Any>(
                 }
             }
         }
-        nestedViewModels.forEach {
+        nestedViewModels.forEach { model ->
             scope.launch {
-                it.error.collectLatest {
+                model.error.collectLatest {
                     _error.emit(it)
                 }
             }
